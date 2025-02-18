@@ -3,6 +3,10 @@
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies"
 import { cookies } from "next/headers"
 
+/**
+ * session public methods
+ */
+
 export const sessionStart = async () => {
   const cookieStore = await cookies()
 
@@ -24,6 +28,10 @@ export const sessionClear = async () => {
   cookieStore.delete("session")
 }
 
+/**
+ * private
+ */
+
 const getSessionExpires = (): Date => {
   // expire in 1 day
   const expires = new Date()
@@ -38,6 +46,7 @@ const getSecure = (): boolean => {
 
 const getSessionCookieOptions = (): Partial<ResponseCookie> => {
   return {
+    httpOnly: true,
     expires: getSessionExpires(),
     secure: getSecure(),
   }

@@ -1,4 +1,5 @@
 import ClientKeygen from "@/components/client-keygen"
+import MagicWordsDemo from "@/components/magic-words-demo"
 import SessionDemo from "@/components/session-demo"
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
 
       <ClientKeygen />
       <SessionDemo />
+      <MagicWordsDemo />
     </div>
   )
 }
