@@ -6,7 +6,18 @@ import { readFile } from "node:fs/promises"
  * magic words types
  */
 
-export type MagicWords = [string, string]
+const MAGIC_WORDS_PHRASE_LENGTH = 3
+
+export type MagicWords = Tuple<string, typeof MAGIC_WORDS_PHRASE_LENGTH>
+
+type Tuple<T, N extends number> = N extends N
+  ? number extends N
+    ? T[]
+    : _TupleOf<T, N, []>
+  : never
+type _TupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
+  ? R
+  : _TupleOf<T, N, [T, ...R]>
 
 /**
  * magic words public methods
@@ -15,10 +26,12 @@ export type MagicWords = [string, string]
 export const getMagicWords = async (seed: number): Promise<MagicWords> => {
   const words = await getWordList()
 
-  // TODO: implement Linear Congruential Generator magic
+  // TODO: implement some magic Linear Congruential Generator gubbins
   // https://gist.github.com/developersharif/948694db21e1685365152d5c9d8ae53b
 
-  return [words[seed], words[seed + 1]]
+  return new Array(MAGIC_WORDS_PHRASE_LENGTH)
+    .fill(undefined)
+    .map((_, i) => words[seed + i]) as MagicWords
 }
 
 /**
