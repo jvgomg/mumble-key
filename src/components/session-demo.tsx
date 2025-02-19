@@ -9,12 +9,13 @@ export const SessionDemo = async () => {
   const session = cookieStore.get("session")
 
   return (
-    <div>
-      <p>Session: {session?.value || "none"}</p>
+    <section>
+      <h2>Session Demo</h2>
+      <p>Session ID: {session?.value || "none"}</p>
       <button onClick={sessionStart}>Start session</button>
       <button onClick={sessionExtend}>Extend session</button>
       <button onClick={sessionClear}>Clear session</button>
-    </div>
+    </section>
   )
 }
 

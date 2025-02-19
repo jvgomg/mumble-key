@@ -6,8 +6,10 @@ import { useState } from "react"
 
 export const ClientKeygen = () => {
   const [publicKey, setPublicKey] = useState<string | undefined>(undefined)
+  const [time, setTime] = useState<number | undefined>(undefined)
 
   const generate = async () => {
+    const startTime = new Date().getTime()
     const keyPair = await window.crypto.subtle.generateKey(
       {
         name: "RSA-OAEP",
@@ -18,18 +20,31 @@ export const ClientKeygen = () => {
       true,
       ["encrypt", "decrypt"],
     )
-    console.log({ keyPair })
+    const time = new Date().getTime() - startTime
     setPublicKey(
       (await window.crypto.subtle.exportKey("jwk", keyPair.publicKey))?.n,
     )
+    setTime(time)
+    console.log({ keyPair })
   }
 
   return (
-    <div>
-      <h2>Client Keygen</h2>
+    <section>
+      <h2>Client Keygen Demo</h2>
       <button onClick={generate}>Generate a key pair</button>
-      <p>publicKey: {publicKey}</p>
-    </div>
+      {publicKey && (
+        <dl>
+          <dt>Public Key</dt>
+          <dd>
+            <code>{publicKey}</code>
+          </dd>
+          <dt>Generation Time</dt>
+          <dd>
+            <code>{time}ms</code>
+          </dd>
+        </dl>
+      )}
+    </section>
   )
 }
 
