@@ -1,6 +1,7 @@
 "use server"
 
 import { readFile } from "node:fs/promises"
+import { join } from "node:path"
 import { cache } from "react"
 
 /**
@@ -48,7 +49,10 @@ export const getMagicWords = async (seed: number): Promise<MagicWords> => {
  */
 
 const getWordList = cache(async (): Promise<string[]> => {
-  const lines = await readFile("src/magic-words.txt", "utf-8")
+  const lines = await readFile(
+    join(process.cwd(), "src/magic-words.txt"),
+    "utf-8",
+  )
   const words = lines.split("\n").filter(Boolean)
   return words
 })
