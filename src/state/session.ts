@@ -10,10 +10,19 @@ import { cookies } from "next/headers"
 export const sessionStart = async () => {
   const cookieStore = await cookies()
 
+  if (cookieStore.has("session")) return cookieStore.get("session")!.value
+
   // TODO: maybe I should sign and verify session tokens
   const sessionId = crypto.randomUUID()
 
   cookieStore.set("session", sessionId, getSessionCookieOptions())
+
+  return sessionId
+}
+
+export const sessionGet = async () => {
+  const cookieStore = await cookies()
+  return cookieStore.get("session")?.value
 }
 
 export const sessionExtend = async () => {

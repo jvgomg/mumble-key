@@ -1,5 +1,7 @@
-import ClientKeygen from "@/components/client-keygen"
+import ClientKeygenDemo from "@/components/client-keygen-demo"
+import FlowDemo from "@/components/flow-demo"
 import MagicWordsDemo from "@/components/magic-words-demo"
+import MagicWordsDisplay from "@/components/magic-words-display"
 import SessionDemo from "@/components/session-demo"
 
 export default function Home() {
@@ -7,7 +9,9 @@ export default function Home() {
     <div>
       <h1>Mumble Key</h1>
 
-      <ClientKeygen />
+      <FlowDemo />
+      <MagicWordsDisplay />
+      <ClientKeygenDemo />
       <SessionDemo />
       <MagicWordsDemo />
     </div>
