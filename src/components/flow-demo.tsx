@@ -2,8 +2,8 @@
 
 import {
   exchangePublicKeyForMagicWords,
-  getMagicWordsSession,
-} from "@/app/actions"
+  getSessionMagicWords,
+} from "@/app/mutations"
 import { setupClientKeys, stringifyKey } from "@/state/client-keys"
 import { MagicWords } from "@/state/magic-words"
 import { useEffect, useState } from "react"
@@ -25,7 +25,7 @@ export const FlowDemo = () => {
   // TODO: make the magic words display a suspended server component
   useEffect(() => {
     const run = async () => {
-      const magicWords = await getMagicWordsSession()
+      const magicWords = await getSessionMagicWords()
       setLoaded(true)
       if (!magicWords) return
       setMagicWords(magicWords)

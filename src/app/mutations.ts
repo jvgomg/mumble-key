@@ -19,6 +19,7 @@ export const exchangePublicKeyForMagicWords = async (publicKey: string) => {
   pipeline.set(`mumble:session:${sessionId}:words`, magicWords.join("_"))
 
   // create magic words with link to public key
+  console.log({ magicWords })
   pipeline.set(`mumble:words:${magicWords.join("_")}:key`, publicKey)
 
   await pipeline.exec()
@@ -28,9 +29,11 @@ export const exchangePublicKeyForMagicWords = async (publicKey: string) => {
 
 export const exchangeMagicWordsForPublicKey = async (
   magicWords: MagicWords,
-): Promise<string> => {
+): Promise<JsonWebKey> => {
+  console.log({ magicWords })
   const publicKey = await redis.get(`mumble:words:${magicWords.join("_")}:key`)
-  assert(typeof publicKey === "string")
+  console.log({ publicKey })
+  assert(typeof publicKey === "object" && publicKey !== null)
   return publicKey
 }
 
@@ -45,7 +48,7 @@ export const sendMessageToMagicWords = async (
   })
 }
 
-export const getMagicWordsSession = async (): Promise<
+export const getSessionMagicWords = async (): Promise<
   MagicWords | undefined
 > => {
   const sessionId = await sessionGet()
@@ -56,7 +59,7 @@ export const getMagicWordsSession = async (): Promise<
   return magicWordsRaw.split("_") as MagicWords
 }
 
-export const getMessagesSession = async (): Promise<
+export const getSessionMessages = async (): Promise<
   { key: string; data: string }[]
 > => {
   const sessionId = await sessionGet()

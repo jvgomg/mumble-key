@@ -1,7 +1,7 @@
-import { getMagicWordsSession } from "@/app/actions"
+import { getSessionMagicWords } from "@/app/mutations"
 
 export const MagicWordsDisplay = async () => {
-  const magicWords = await getMagicWordsSession()
+  const magicWords = await getSessionMagicWords()
 
   return (
     <div>
