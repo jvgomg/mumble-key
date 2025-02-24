@@ -1,6 +1,7 @@
 "use server"
 
-import { getMagicWords, MagicWords } from "@/state/magic-words"
+import { MagicWords } from "@/state/domain"
+import { getMagicWords } from "@/state/magic-words"
 import { sessionGet, sessionStart } from "@/state/session"
 import { Redis } from "@upstash/redis"
 import assert from "assert"

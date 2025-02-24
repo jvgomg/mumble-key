@@ -5,7 +5,7 @@ import {
   getSessionMagicWords,
 } from "@/app/mutations"
 import { setupClientKeys, stringifyKey } from "@/state/client-keys"
-import { MagicWords } from "@/state/magic-words"
+import { MagicWords } from "@/state/domain"
 import { useEffect, useState } from "react"
 
 export const FlowDemo = () => {

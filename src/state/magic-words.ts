@@ -3,29 +3,14 @@
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { cache } from "react"
-
-/**
- * magic words types
- */
-
-const MAGIC_WORDS_PHRASE_LENGTH = 3
-
-export type MagicWords = Tuple<string, typeof MAGIC_WORDS_PHRASE_LENGTH>
-
-type Tuple<T, N extends number> = N extends N
-  ? number extends N
-    ? T[]
-    : _TupleOf<T, N, []>
-  : never
-type _TupleOf<T, N extends number, R extends unknown[]> = R["length"] extends N
-  ? R
-  : _TupleOf<T, N, [T, ...R]>
+import { MAGIC_WORDS_PHRASE_LENGTH, MagicWords } from "./domain"
 
 /**
  * magic words public methods
  */
 
 export const getMagicWords = async (seed: number): Promise<MagicWords> => {
+  const phaseLength = MAGIC_WORDS_PHRASE_LENGTH
   const words = await getWordList()
 
   // LCG parameters (using common values)
@@ -34,7 +19,7 @@ export const getMagicWords = async (seed: number): Promise<MagicWords> => {
   const c = 51749 // increment
 
   // Generate sequence of indices using LCG
-  const indices = Array.from({ length: MAGIC_WORDS_PHRASE_LENGTH }, (_, i) => {
+  const indices = Array.from({ length: phaseLength }, (_, i) => {
     // X_(n+1) = (a * X_n + c) mod m
     const index = Math.abs((a * (seed + i) + c) % m)
     return index
