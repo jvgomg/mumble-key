@@ -1,19 +1,20 @@
-import ClientKeygenDemo from "@/components/client-keygen-demo"
-import FlowDemo from "@/components/flow-demo"
-import MagicWordsDemo from "@/components/magic-words-demo"
-import MagicWordsDisplay from "@/components/magic-words-display"
-import SessionDemo from "@/components/session-demo"
+import Link from "next/link"
 
-export default function Home() {
+export default function Page() {
   return (
     <div>
       <h1>Mumble Key</h1>
+      <p>Send messages securely, anonymously and asynchronously.</p>
+      <p>
+        Mumble Key is a reimplementation of the Whisper Key application. Learn
+        about this project and read the sourcecode over at{" "}
+        <a href="https://github.com/jvgomg/mumble-key">GitHub</a>.
+      </p>
 
-      <FlowDemo />
-      <MagicWordsDisplay />
-      <ClientKeygenDemo />
-      <SessionDemo />
-      <MagicWordsDemo />
+      <hr />
+
+      <Link href="/send">Send a message</Link>
+      <Link href="/receive">Receive messages</Link>
     </div>
   )
 }

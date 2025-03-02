@@ -12,7 +12,7 @@ export const sessionStart = async () => {
 
   if (cookieStore.has("session")) return cookieStore.get("session")!.value
 
-  // TODO: maybe I should sign and verify session tokens
+  // TODO: maybe I should sign and verify session tokens in some way?
   const sessionId = crypto.randomUUID()
 
   cookieStore.set("session", sessionId, getSessionCookieOptions())

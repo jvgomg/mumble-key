@@ -4,7 +4,7 @@ import {
   exchangePublicKeyForMagicWords,
   getSessionMagicWords,
 } from "@/app/mutations"
-import { setupClientKeys, stringifyKey } from "@/state/client-keys"
+import { setupClientKeysOnDevice, stringifyKey } from "@/state/client-keys"
 import { MagicWords } from "@/state/domain"
 import { useEffect, useState } from "react"
 
@@ -13,7 +13,7 @@ export const FlowDemo = () => {
   const [magicWords, setMagicWords] = useState<undefined | MagicWords>()
 
   const goForIt = async () => {
-    const { publicKey } = await setupClientKeys()
+    const { publicKey } = await setupClientKeysOnDevice()
     console.log({ publicKey })
     const magicWords = await exchangePublicKeyForMagicWords(
       await stringifyKey(publicKey),

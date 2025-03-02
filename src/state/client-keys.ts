@@ -2,14 +2,11 @@
 
 const PRIVATE_KEY_LOCAL_STORAGE_KEY = "private-key"
 
-export const setupClientKeys = async (): Promise<{
+export const setupClientKeysOnDevice = async (): Promise<{
   time: number
   publicKey: CryptoKey
 }> => {
-  const startTime = new Date().getTime()
-
-  const keyPair = await generateClientKeyPair()
-  const time = new Date().getTime() - startTime
+  const { keyPair, time } = await generateClientKeyPair()
   await setPrivateKeyLocalStorage(keyPair)
 
   return {
@@ -34,11 +31,15 @@ export const getPrivateKeyLocalStorage = async (): Promise<
   return importedKey
 }
 
-/**
- * private methods
- */
+export const removePrivateKeyLocalStorage = () => {
+  localStorage.removeItem(PRIVATE_KEY_LOCAL_STORAGE_KEY)
+}
 
-const generateClientKeyPair = async (): Promise<CryptoKeyPair> => {
+export const generateClientKeyPair = async (): Promise<{
+  keyPair: CryptoKeyPair
+  time: number
+}> => {
+  const startTime = new Date().getTime()
   const keyPair = await window.crypto.subtle.generateKey(
     {
       name: "RSA-OAEP",
@@ -49,8 +50,16 @@ const generateClientKeyPair = async (): Promise<CryptoKeyPair> => {
     true,
     ["encrypt", "decrypt"],
   )
-  return keyPair
+  const time = new Date().getTime() - startTime
+  return {
+    keyPair,
+    time,
+  }
 }
+
+/**
+ * private methods
+ */
 
 const importPrivateKey = async (key: JsonWebKey): Promise<CryptoKey> => {
   const privateKey = await crypto.subtle.importKey(

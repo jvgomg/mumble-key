@@ -1,8 +1,14 @@
 "use server"
 
-import { MagicWords } from "@/state/domain"
+import { MagicMessageEncoded, MagicWords } from "@/state/domain"
 import { getMagicWords } from "@/state/magic-words"
-import { sessionGet, sessionStart } from "@/state/session"
+import {
+  makeMagicWordsToKeyKey,
+  makeMagicWordsToMessageKey,
+  makeSeedCountKey,
+  makeSessionToMagicWordsKey,
+} from "@/state/redis-keys"
+import { sessionClear, sessionGet, sessionStart } from "@/state/session"
 import { Redis } from "@upstash/redis"
 import assert from "assert"
 
@@ -11,17 +17,17 @@ const redis = Redis.fromEnv()
 export const exchangePublicKeyForMagicWords = async (publicKey: string) => {
   const sessionId = await sessionStart()
 
-  const seed = await redis.incr("mumble:last_seed")
+  const seed = await redis.incr(makeSeedCountKey())
   const magicWords = await getMagicWords(seed)
 
   const pipeline = redis.pipeline()
 
   // create link between session and magic words
-  pipeline.set(`mumble:session:${sessionId}:words`, magicWords.join("_"))
+  pipeline.set(makeSessionToMagicWordsKey(sessionId), magicWords.join("_"))
 
   // create magic words with link to public key
   console.log({ magicWords })
-  pipeline.set(`mumble:words:${magicWords.join("_")}:key`, publicKey)
+  pipeline.set(makeMagicWordsToKeyKey(magicWords), publicKey)
 
   await pipeline.exec()
 
@@ -32,21 +38,20 @@ export const exchangeMagicWordsForPublicKey = async (
   magicWords: MagicWords,
 ): Promise<JsonWebKey> => {
   console.log({ magicWords })
-  const publicKey = await redis.get(`mumble:words:${magicWords.join("_")}:key`)
+  const publicKey = await redis.get(makeMagicWordsToKeyKey(magicWords))
   console.log({ publicKey })
   assert(typeof publicKey === "object" && publicKey !== null)
   return publicKey
 }
 
-export const sendMessageToMagicWords = async (
-  magicWords: MagicWords,
-  key: string,
-  data: string,
-) => {
-  await redis.lpush(`mumble:words:${magicWords.join("_")}:messages`, {
-    key,
-    data,
-  })
+export const sendMessageToMagicWords = async ({
+  magicWords,
+  message,
+}: {
+  magicWords: MagicWords
+  message: MagicMessageEncoded
+}) => {
+  await redis.lpush(makeMagicWordsToMessageKey(magicWords), message)
 }
 
 export const getSessionMagicWords = async (): Promise<
@@ -54,27 +59,50 @@ export const getSessionMagicWords = async (): Promise<
 > => {
   const sessionId = await sessionGet()
   if (!sessionId) return
-  const magicWordsRaw = await redis.get(`mumble:session:${sessionId}:words`)
+  const magicWordsRaw = await redis.get(makeSessionToMagicWordsKey(sessionId))
   if (!magicWordsRaw) return
   assert(typeof magicWordsRaw === "string")
   return magicWordsRaw.split("_") as MagicWords
 }
 
-export const getSessionMessages = async (): Promise<
-  { key: string; data: string }[]
-> => {
+export const getSessionMessages = async (): Promise<MagicMessageEncoded[]> => {
   const sessionId = await sessionGet()
   if (!sessionId) throw new Error("No session")
-  const magicWordsRaw = await redis.get(`mumble:session:${sessionId}:words`)
+  const magicWordsRaw = await redis.get(makeSessionToMagicWordsKey(sessionId))
   console.log({ magicWordsRaw })
   assert(typeof magicWordsRaw === "string")
   const magicWords = magicWordsRaw.split("_") as MagicWords
   console.log({ magicWords })
-  const messagesRaw = await redis.lrange(
-    `mumble:words:${magicWords.join("_")}:messages`,
+  const messagesRaw = await redis.lrange<MagicMessageEncoded>(
+    makeMagicWordsToMessageKey(magicWords),
     0,
     -1,
   )
   console.log({ messagesRaw })
-  return messagesRaw.map((m) => JSON.parse(m))
+  return messagesRaw
+}
+
+export const destroySession = async (): Promise<void> => {
+  const actions: Promise<unknown>[] = []
+
+  const sessionId = await sessionGet()
+
+  if (!sessionId) throw new Error("No session found")
+
+  // delete session cookie
+  actions.push(sessionClear())
+
+  const magicWords = await getSessionMagicWords()
+  if (magicWords) {
+    // delete link between session and magic words
+    actions.push(redis.del(makeSessionToMagicWordsKey(sessionId)))
+
+    // delete link between magic words and key
+    actions.push(redis.del(makeMagicWordsToKeyKey(magicWords)))
+
+    // delete all the messages
+    actions.push(redis.del(makeMagicWordsToMessageKey(magicWords)))
+  }
+
+  await Promise.all(actions)
 }

@@ -1,5 +1,5 @@
 "use client"
-import { setupClientKeys } from "@/state/client-keys"
+import { setupClientKeysOnDevice } from "@/state/client-keys"
 import { useState } from "react"
 
 // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto
@@ -12,7 +12,7 @@ export const ClientKeygenDemo = () => {
   )
 
   const handleSetup = async () => {
-    const { publicKey, time } = await setupClientKeys()
+    const { publicKey, time } = await setupClientKeysOnDevice()
     setPublicKey(publicKey.type)
     setGenerationTime(time)
   }
