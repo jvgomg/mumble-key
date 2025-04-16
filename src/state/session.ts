@@ -49,6 +49,7 @@ const getSessionExpires = (): Date => {
 }
 
 const getSecure = (): boolean => {
+  // TODO: set this up so you can dev and build locally, without the need for https
   return false
   return process.env.NODE_ENV === "production"
 }
