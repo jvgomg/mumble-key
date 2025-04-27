@@ -1,6 +1,6 @@
 "use server"
 
-import { MagicMessageEncoded, MagicWords } from "@/state/domain"
+import { MagicMessageEncoded, MagicWords, TTL } from "@/state/domain"
 import { getMagicWords } from "@/state/magic-words"
 import {
   makeMagicWordsToKeyKey,
@@ -20,16 +20,17 @@ export const exchangePublicKeyForMagicWords = async (publicKey: string) => {
   const seed = await redis.incr(makeSeedCountKey())
   const magicWords = await getMagicWords(seed)
 
-  const pipeline = redis.pipeline()
+  const p = redis.pipeline()
 
   // create link between session and magic words
-  pipeline.set(makeSessionToMagicWordsKey(sessionId), magicWords.join("_"))
+  p.set(makeSessionToMagicWordsKey(sessionId), magicWords.join("_"))
+  p.expire(makeSessionToMagicWordsKey(sessionId), TTL)
 
   // create magic words with link to public key
-  console.log({ magicWords })
-  pipeline.set(makeMagicWordsToKeyKey(magicWords), publicKey)
+  p.set(makeMagicWordsToKeyKey(magicWords), publicKey)
+  p.expire(makeMagicWordsToKeyKey(magicWords), TTL)
 
-  await pipeline.exec()
+  await p.exec()
 
   return magicWords
 }
@@ -51,7 +52,10 @@ export const sendMessageToMagicWords = async ({
   magicWords: MagicWords
   message: MagicMessageEncoded
 }) => {
-  await redis.lpush(makeMagicWordsToMessageKey(magicWords), message)
+  const p = redis.pipeline()
+  p.lpush(makeMagicWordsToMessageKey(magicWords), message)
+  p.expire(makeMagicWordsToMessageKey(magicWords), TTL)
+  await p.exec()
 }
 
 export const getSessionMagicWords = async (): Promise<
@@ -68,41 +72,42 @@ export const getSessionMagicWords = async (): Promise<
 export const getSessionMessages = async (): Promise<MagicMessageEncoded[]> => {
   const sessionId = await sessionGet()
   if (!sessionId) throw new Error("No session")
-  const magicWordsRaw = await redis.get(makeSessionToMagicWordsKey(sessionId))
-  console.log({ magicWordsRaw })
-  assert(typeof magicWordsRaw === "string")
+
+  const magicWordsRaw = await redis.get<string>(
+    makeSessionToMagicWordsKey(sessionId),
+  )
+  if (!magicWordsRaw) throw new Error("No magic words found")
+
   const magicWords = magicWordsRaw.split("_") as MagicWords
-  console.log({ magicWords })
   const messagesRaw = await redis.lrange<MagicMessageEncoded>(
     makeMagicWordsToMessageKey(magicWords),
     0,
     -1,
   )
-  console.log({ messagesRaw })
   return messagesRaw
 }
 
 export const destroySession = async (): Promise<void> => {
-  const actions: Promise<unknown>[] = []
-
   const sessionId = await sessionGet()
-
   if (!sessionId) throw new Error("No session found")
 
-  // delete session cookie
-  actions.push(sessionClear())
-
   const magicWords = await getSessionMagicWords()
+
   if (magicWords) {
+    const p = redis.pipeline()
+
     // delete link between session and magic words
-    actions.push(redis.del(makeSessionToMagicWordsKey(sessionId)))
+    p.del(makeSessionToMagicWordsKey(sessionId))
 
     // delete link between magic words and key
-    actions.push(redis.del(makeMagicWordsToKeyKey(magicWords)))
+    p.del(makeMagicWordsToKeyKey(magicWords))
 
     // delete all the messages
-    actions.push(redis.del(makeMagicWordsToMessageKey(magicWords)))
+    p.del(makeMagicWordsToMessageKey(magicWords))
+
+    await p.exec()
   }
 
-  await Promise.all(actions)
+  // delete session cookie
+  await sessionClear()
 }

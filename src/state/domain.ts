@@ -28,6 +28,9 @@ export interface MagicMessageEncoded {
   iv: string
 }
 
+const DAY = 60 * 60 * 24
+export const TTL = 7 * DAY
+
 /**
  * utils
  */
