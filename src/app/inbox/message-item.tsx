@@ -28,12 +28,17 @@ export const MessageItem = ({ message }: { message: MagicMessageEncoded }) => {
 
   return (
     <div>
-      <p>{message.encryptedMessage}</p>
+      <pre>{message.encryptedMessage}</pre>
 
-      {!decrypted && <button onClick={handle}>Decrypt message</button>}
+      {decrypted && "message" in decrypted && (
+        <blockquote>{decrypted.message}</blockquote>
+      )}
 
-      {decrypted && "message" in decrypted && <p>{decrypted.message}</p>}
       {decrypted && "error" in decrypted && <p>{decrypted.error}</p>}
+
+      <button onClick={handle} disabled={decrypted && "message" in decrypted}>
+        Decrypt message
+      </button>
     </div>
   )
 }

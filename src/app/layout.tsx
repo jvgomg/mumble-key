@@ -2,6 +2,8 @@ import MagicWordsDisplay from "@/components/magic-words-display"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getSessionMagicWords } from "./mutations"
+import "@/styles/cosmo.css"
+import "@/styles/cosmo.extend.css"
 
 export const metadata: Metadata = {
   title: "Mumble Key",
@@ -19,7 +21,11 @@ export default async function Layout({
     <html lang="en">
       <body>
         <header>
-          <Link href="/">Mumble Key</Link>
+          <section>
+            <nav>
+              <Link href="/">Mumble Key</Link>
+            </nav>
+          </section>
 
           {magicWords && (
             <>
@@ -27,9 +33,23 @@ export default async function Layout({
               <Link href="/inbox">Message Inbox</Link>
             </>
           )}
+
+          <hr />
         </header>
 
-        {children}
+        <main>{children}</main>
+
+        <footer>
+          <hr />
+          <p>
+            <small>
+              This application is under active development. It should not be
+              used to send sensitive information.
+            </small>
+            <br />
+            <small>Use at your own risk!</small>
+          </p>
+        </footer>
       </body>
     </html>
   )

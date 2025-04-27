@@ -14,13 +14,13 @@ export default async function Page() {
 
   return (
     <div>
-      <ul>
+      <ol>
         {messages.map((message, i) => (
           <li key={message.encryptedMessage?.slice(0, 4) || i}>
             <MessageItem message={message} />
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   )
 }

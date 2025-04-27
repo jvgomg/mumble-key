@@ -14,12 +14,14 @@ export default async function Layout({
 
   return (
     <div>
-      <hr />
-
       <h1>Message Inbox</h1>
-      <RefreshButton />
-      <Link href="/destroy">Destroy</Link>
-      <main>{children}</main>
+      <div style={{ display: "flex", gap: "1em" }}>
+        <RefreshButton />
+        <Link href="/destroy" className="button danger">
+          Destroy Magic Words
+        </Link>
+      </div>
+      {children}
     </div>
   )
 }

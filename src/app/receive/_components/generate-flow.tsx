@@ -7,7 +7,6 @@ import {
   stringifyKey,
 } from "@/state/client-keys"
 import { MagicWords } from "@/state/domain"
-import { KeyIcon } from "lucide-react"
 import { useState } from "react"
 
 export const GenerateMagicWordsFlow = () => {
@@ -50,57 +49,52 @@ export const GenerateMagicWordsFlow = () => {
     <div>
       <h2>Generate Magic Words</h2>
       <p>
-        Summoning Magic Words, which are securely generated and exchanged,
-        requires an enchantment involving a few steps
+        Summoning Magic Words in a secure way requires an enchantment involving
+        a few steps.
       </p>
-      <ol>
-        <li>Generate 2 cryptographic keys locally on your device</li>
-        <li>
-          Save the <em>private</em> key into your web browser storage
-        </li>
-        <li>
-          Send <em>public</em> key to the server and get your Magic Words
-          returned
-        </li>
-      </ol>
 
       <section data-complete={!!step1}>
-        <h2>Step 1</h2>
+        <h3>Step 1</h3>
+        <p>
+          Generate 2 cryptographic keys locally, within your device’s web
+          browser
+        </p>
         <button onClick={generate} disabled={working || !!step1}>
           Generate Keys
         </button>
+        {step1?.time && <pre>Time taken: {step1.time / 1000} seconds</pre>}
       </section>
 
       <section data-complete={!!step1}>
-        <h2>Step 2</h2>
+        <h3>Step 2</h3>
+        <p>
+          Save the <em>private</em> key into your web browser storage
+        </p>
         <div>
-          {step1?.time && <p>Time taken: {step1.time / 1000} seconds</p>}
           <div>
-            <KeyIcon />
-            <small>Private key</small>
             <button
               disabled={!step1 || !!step2 || working}
               onClick={savePrivateKey}
             >
-              Save private key
+              Save private key locally
             </button>
           </div>
         </div>
       </section>
 
       <section data-complete={!!step1 || !!step2}>
-        <h2>Step 3</h2>
+        <h3>Step 3</h3>
+        <p>
+          Send the <em>public</em> key to the server and exchange for some Magic
+          Words
+        </p>
         <div>
-          <div>
-            <KeyIcon />
-            <small>Public key</small>
-            <button
-              disabled={!step1 || !step2 || !!step3 || working}
-              onClick={exchangePublicKey}
-            >
-              Exchange for Magic Words
-            </button>
-          </div>
+          <button
+            disabled={!step1 || !step2 || !!step3 || working}
+            onClick={exchangePublicKey}
+          >
+            Send public key
+          </button>
         </div>
       </section>
     </div>

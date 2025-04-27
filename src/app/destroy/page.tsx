@@ -9,6 +9,7 @@ export default async function Page() {
   return (
     <div>
       <h1>Start again</h1>
+      <p>Are you sure you want destroy your session?</p>
       <DestroyConfirmation serverThings={thingsToDestroy} />
     </div>
   )

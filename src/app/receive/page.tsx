@@ -8,32 +8,33 @@ export default async function Page() {
 
   // TODO: check validity of local storage state (is the private key still there?)
 
-  const magicWordsChildren = magicWords && (
-    <div>
-      <hr />
-
-      <h2>Magic Words</h2>
-      <MagicWordsDisplay magicWords={magicWords} />
-
-      <p>
-        <strong>
-          Mumble these Magic Words to the person who wants to send you a message
-        </strong>
-      </p>
-
-      <ul>
-        <li>
-          <Link href="/inbox">Go to Message Inbox</Link>
-        </li>
-      </ul>
-    </div>
-  )
-
   return (
     <div>
+      <h1>Receive messages</h1>
+      <p>
+        Generate some Magic Words and then give them to the person who wants to
+        send you a message.
+      </p>
+
       <GenerateMagicWordsFlow />
 
-      {magicWordsChildren}
+      <hr />
+      <h2>Magic Words</h2>
+
+      {magicWords ? (
+        <>
+          <MagicWordsDisplay magicWords={magicWords} />
+          <p>
+            Mumble these Magic Words to the person who wants to send you a
+            message.
+          </p>
+          <Link href="/inbox">Go to Message Inbox</Link>
+        </>
+      ) : (
+        <>
+          <p>Complete the steps above to summon your Magic Words</p>
+        </>
+      )}
     </div>
   )
 }

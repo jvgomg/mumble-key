@@ -55,8 +55,6 @@ export const DestroyConfirmation = ({
 
   return (
     <div>
-      <p>Are you sure you want start again?</p>
-
       <p>The following things will be destroyed:</p>
       <ul>
         {thingsToDestroy.map((thing) => (
@@ -64,11 +62,15 @@ export const DestroyConfirmation = ({
         ))}
       </ul>
 
-      <Link href="/">Cancel</Link>
+      <div style={{ display: "flex", gap: "0.5em" }}>
+        <Link href="/" className="button">
+          Cancel
+        </Link>
 
-      <button onClick={confirmed} disabled={working}>
-        Confirm
-      </button>
+        <button onClick={confirmed} disabled={working} className="danger">
+          Destroy session
+        </button>
+      </div>
     </div>
   )
 }

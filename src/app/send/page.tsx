@@ -35,7 +35,7 @@ export default function Page() {
 
       <form action={handle}>
         <label htmlFor="words">Recipient’s Magic Words</label>
-        <input id="words" name="words" type="text" />
+        <input id="words" name="words" type="text" required />
         <button type="submit">Next</button>
       </form>
     </div>
