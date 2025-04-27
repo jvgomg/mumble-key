@@ -11,7 +11,13 @@ import { MAGIC_WORDS_PHRASE_LENGTH, MagicWords } from "./domain"
 
 export const getMagicWords = async (seed: number): Promise<MagicWords> => {
   const words = await getWordList()
-  const magicWords = shuffle(words, seed, MAGIC_WORDS_PHRASE_LENGTH)
+
+  const magicWords = selectWords({
+    words,
+    seed,
+    count: MAGIC_WORDS_PHRASE_LENGTH,
+  })
+
   return magicWords as MagicWords
 }
 
@@ -28,19 +34,52 @@ const getWordList = cache(async (): Promise<string[]> => {
   return words
 })
 
-const shuffle = (words: string[], seed: number, phaseLength: number) => {
-  // LCG parameters (using common values)
-  const m = words.length // modulus (using word list length)
-  const a = 1597 // multiplier
-  const c = 51749 // increment
+// Configurable LCG function
+function lcg(
+  seed: number,
+  multiplier: number,
+  increment: number,
+  modulus: number,
+) {
+  return () => {
+    seed = (multiplier * seed + increment) % modulus
+    return seed / modulus // Normalize to [0,1)
+  }
+}
 
-  // Generate sequence of indices using LCG
-  const indices = Array.from({ length: phaseLength }, (_, i) => {
-    // X_(n+1) = (a * X_n + c) mod m
-    const index = Math.abs((a * (seed * phaseLength + i) + c) % m)
-    return index
-  })
+function selectWords({
+  words,
+  seed,
+  count,
+  multiplier = Number(process.env.LCG_MULTIPLIER) || 1103515245,
+  increment = Number(process.env.LCG_INCREMENT) || 12345,
+  modulus = Number(process.env.LCG_MODULUS) || 2 ** 31,
+}: {
+  words: string[]
+  seed: number
+  count: number
+  multiplier?: number
+  increment?: number
+  modulus?: number
+}): string[] {
+  if (words.length === 0 || count <= 0) {
+    return []
+  }
 
-  const phrase = indices.map((index) => words[index])
-  return phrase
+  if (count > words.length) {
+    throw new Error(
+      "Count cannot be greater than the number of available words.",
+    )
+  }
+
+  const random = lcg(seed, multiplier, increment, modulus)
+  const availableWords = [...words]
+  const selectedWords: string[] = []
+
+  for (let i = 0; i < count; i++) {
+    const index = Math.floor(random() * availableWords.length)
+    selectedWords.push(availableWords.splice(index, 1)[0])
+  }
+
+  return selectedWords
 }
