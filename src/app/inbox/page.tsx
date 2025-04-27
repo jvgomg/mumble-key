@@ -1,4 +1,4 @@
-import { getSessionMessages } from "../mutations"
+import { getSessionMessages } from "../../state/mutations"
 import { MessageItem } from "./message-item"
 
 export default async function Page() {

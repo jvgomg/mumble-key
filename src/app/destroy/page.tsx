@@ -1,5 +1,5 @@
 import { sessionGet } from "@/state/session"
-import { getSessionMagicWords, getSessionMessages } from "../mutations"
+import { getSessionMagicWords, getSessionMessages } from "../../state/mutations"
 import { DestroyConfirmation } from "./destory-confirmation"
 import { redirect } from "next/navigation"
 

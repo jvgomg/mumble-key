@@ -1,4 +1,4 @@
-import { getSessionMagicWords } from "@/app/mutations"
+import { getSessionMagicWords } from "@/state/mutations"
 
 export const MagicWordsServer = async () => {
   const magicWords = await getSessionMagicWords()

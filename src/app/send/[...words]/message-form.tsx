@@ -4,7 +4,7 @@ import MagicWordsDisplay from "@/components/magic-words-display"
 import { packageMessage } from "@/state/client-message"
 import { MagicWords } from "@/state/domain"
 import { useActionState } from "react"
-import { createMessage } from "./send/[...words]/actions"
+import { createMessage } from "./actions"
 import { useFormStatus } from "react-dom"
 
 const initialState = {

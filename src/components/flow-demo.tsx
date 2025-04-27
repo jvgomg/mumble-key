@@ -3,7 +3,7 @@
 import {
   exchangePublicKeyForMagicWords,
   getSessionMagicWords,
-} from "@/app/mutations"
+} from "@/state/mutations"
 import { setupClientKeysOnDevice, stringifyKey } from "@/state/client-keys"
 import { MagicWords } from "@/state/domain"
 import { useEffect, useState } from "react"

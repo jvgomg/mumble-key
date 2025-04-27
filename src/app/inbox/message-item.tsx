@@ -2,10 +2,10 @@
 
 import { getPrivateKeyLocalStorage } from "@/state/client-keys"
 import { decryptMagicMessage } from "@/state/client-message"
-import { MagicMessageEncoded } from "@/state/domain"
+import { MagicMessage } from "@/state/domain"
 import { useState } from "react"
 
-export const MessageItem = ({ message }: { message: MagicMessageEncoded }) => {
+export const MessageItem = ({ message }: { message: MagicMessage }) => {
   const [decrypted, setDecrypted] = useState<
     undefined | { message: string } | { error: string }
   >()

@@ -1,6 +1,6 @@
 "use client"
 
-import { exchangePublicKeyForMagicWords } from "@/app/mutations"
+import { exchangePublicKeyForMagicWords } from "@/state/mutations"
 import {
   generateClientKeyPair,
   setPrivateKeyLocalStorage,

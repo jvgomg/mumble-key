@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { getSessionMagicWords } from "../mutations"
+import { getSessionMagicWords } from "../../state/mutations"
 import { RefreshButton } from "./refresh-button"
 
 export default async function Layout({

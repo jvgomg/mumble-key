@@ -6,7 +6,7 @@ import {
 } from "@/state/client-keys"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { destroySession } from "../mutations"
+import { destroySession } from "../../state/mutations"
 import { useRouter } from "next/navigation"
 
 export const DestroyConfirmation = ({

@@ -12,7 +12,7 @@ export type MagicWords = Tuple<string, typeof MAGIC_WORDS_PHRASE_LENGTH>
  * The data needed to transport, store and decrypt a message between users
  */
 // TODO: have a read of this - https://gist.github.com/rpivo/2904951ee31ce9146d32321f12c941bd
-export interface MagicMessageEncoded {
+export interface MagicMessage {
   /**
    * The single use secondary AES key which has been encrypted with a public RSA key
    * AES-GCM - https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt#aes-gcm_2

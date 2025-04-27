@@ -1,5 +1,5 @@
 import MagicWordsDisplay from "@/components/magic-words-display"
-import { getSessionMagicWords } from "../mutations"
+import { getSessionMagicWords } from "../../state/mutations"
 import { GenerateMagicWordsFlow } from "./generate-flow"
 import Link from "next/link"
 

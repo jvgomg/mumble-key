@@ -1,7 +1,7 @@
 "use client"
 
 import { stringifyKey } from "./client-keys"
-import { MagicMessageEncoded } from "./domain"
+import { MagicMessage } from "./domain"
 
 export const packageMessage = async ({
   message,
@@ -9,7 +9,7 @@ export const packageMessage = async ({
 }: {
   message: string
   publicKey: JsonWebKey
-}): Promise<MagicMessageEncoded> => {
+}): Promise<MagicMessage> => {
   // import the public key
   // TODO: do this earlier in the flow - user’s shouldn't type in their message and then this to fail
   const importedPublicKey = await window.crypto.subtle.importKey(
@@ -72,7 +72,7 @@ export const decryptMagicMessage = async ({
   message: { encryptedMessage, encryptedKey, iv },
 }: {
   privateKey: CryptoKey
-  message: MagicMessageEncoded
+  message: MagicMessage
 }): Promise<string> => {
   // unpack the secondary key
   const decryptedSecondaryKey = await window.crypto.subtle.decrypt(

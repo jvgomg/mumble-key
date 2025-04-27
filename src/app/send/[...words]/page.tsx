@@ -1,6 +1,6 @@
-import { MessageForm } from "@/app/message-form"
-import { exchangeMagicWordsForPublicKey } from "@/app/mutations"
 import { MagicWords } from "@/state/domain"
+import { exchangeMagicWordsForPublicKey } from "@/state/mutations"
+import { MessageForm } from "./message-form"
 
 interface Props {
   params: Promise<{ words: MagicWords }>

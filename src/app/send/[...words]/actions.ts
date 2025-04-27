@@ -1,6 +1,6 @@
 "use server"
 
-import { sendMessageToMagicWords } from "@/app/mutations"
+import { sendMessageToMagicWords } from "@/state/mutations"
 import { MagicWords } from "@/state/domain"
 import assert from "assert"
 

@@ -1,7 +1,7 @@
 import MagicWordsDisplay from "@/components/magic-words-display"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { getSessionMagicWords } from "./mutations"
+import { getSessionMagicWords } from "../state/mutations"
 import "@/styles/cosmo.css"
 import "@/styles/cosmo.extend.css"
 

@@ -1,6 +1,6 @@
 "use server"
 
-import { MagicMessageEncoded, MagicWords, TTL } from "@/state/domain"
+import { MagicMessage, MagicWords, TTL } from "@/state/domain"
 import { getMagicWords } from "@/state/magic-words"
 import {
   makeMagicWordsToKeyKey,
@@ -50,7 +50,7 @@ export const sendMessageToMagicWords = async ({
   message,
 }: {
   magicWords: MagicWords
-  message: MagicMessageEncoded
+  message: MagicMessage
 }) => {
   const p = redis.pipeline()
   p.lpush(makeMagicWordsToMessageKey(magicWords), message)
@@ -69,7 +69,7 @@ export const getSessionMagicWords = async (): Promise<
   return magicWordsRaw.split("_") as MagicWords
 }
 
-export const getSessionMessages = async (): Promise<MagicMessageEncoded[]> => {
+export const getSessionMessages = async (): Promise<MagicMessage[]> => {
   const sessionId = await sessionGet()
   if (!sessionId) throw new Error("No session")
 
@@ -79,7 +79,7 @@ export const getSessionMessages = async (): Promise<MagicMessageEncoded[]> => {
   if (!magicWordsRaw) throw new Error("No magic words found")
 
   const magicWords = magicWordsRaw.split("_") as MagicWords
-  const messagesRaw = await redis.lrange<MagicMessageEncoded>(
+  const messagesRaw = await redis.lrange<MagicMessage>(
     makeMagicWordsToMessageKey(magicWords),
     0,
     -1,
