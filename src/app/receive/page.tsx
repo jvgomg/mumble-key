@@ -1,6 +1,6 @@
 import MagicWordsDisplay from "@/components/magic-words-display"
 import { getSessionMagicWords } from "../mutations"
-import { GenerateMagicWordsFlow } from "./_components/generate-flow"
+import { GenerateMagicWordsFlow } from "./generate-flow"
 import Link from "next/link"
 
 export default async function Page() {
