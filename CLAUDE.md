@@ -26,6 +26,9 @@ pnpm lint
 
 # Format code with Prettier
 pnpm prettier --write .
+
+# Generate CRON_SECRET for Vercel deployment
+pnpm generate-env
 ```
 
 ## Architecture Overview
@@ -86,7 +89,7 @@ src/
 Required for production:
 - `UPSTASH_REDIS_REST_URL` - Redis connection URL
 - `UPSTASH_REDIS_REST_TOKEN` - Redis auth token
-- `CRON_SECRET` - Secret for Vercel Cron authentication
+- `CRON_SECRET` - Secret for Vercel Cron authentication (generate with `pnpm generate-env`)
 
 Optional LCG configuration:
 - `LCG_A` - LCG multiplier (default: 1103515245)
