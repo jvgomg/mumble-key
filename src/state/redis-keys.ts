@@ -10,3 +10,6 @@ export const makeMagicWordsToKeyKey = (magicWords: MagicWords) =>
 
 export const makeMagicWordsToMessageKey = (magicWords: MagicWords) =>
   `mumble:words:${magicWords.join("_")}:messages`
+
+export const makeCronKeepAliveKey = () =>
+  `mumble:cron:keepalive`

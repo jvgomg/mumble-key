@@ -86,6 +86,7 @@ src/
 Required for production:
 - `UPSTASH_REDIS_REST_URL` - Redis connection URL
 - `UPSTASH_REDIS_REST_TOKEN` - Redis auth token
+- `CRON_SECRET` - Secret for Vercel Cron authentication
 
 Optional LCG configuration:
 - `LCG_A` - LCG multiplier (default: 1103515245)
@@ -100,6 +101,17 @@ Optional LCG configuration:
 - Sessions are httpOnly cookies
 - All data auto-expires after 7 days
 - No user tracking or persistent accounts
+
+### API Routes
+
+#### Cron Keep-Alive
+- **Path**: `/api/cron/keep-alive`
+- **Purpose**: Keeps Upstash Redis active on free tier
+- **Schedule**: Every 12 hours (configured in vercel.json)
+- **Authentication**: Requires `CRON_SECRET` in Authorization header
+- **Redis Keys**: 
+  - `mumble:cron:keepalive` - Single record with latest timestamp
+  - `mumble:cron:keepalive:count` - Tracks total number of updates
 
 ### Testing
 
