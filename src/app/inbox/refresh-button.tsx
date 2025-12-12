@@ -44,6 +44,7 @@ function useRouterRefresh() {
     if (isTriggered && !isPending) {
       if (resolve) {
         resolve(null)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsTriggered(false)
         setResolve(null)
       }
