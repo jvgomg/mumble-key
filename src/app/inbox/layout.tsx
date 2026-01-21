@@ -1,4 +1,5 @@
-import Link from "next/link"
+import { Box, Button, Heading, HStack } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { redirect } from "next/navigation"
 import { getSessionMagicWords } from "../../state/mutations"
 import { RefreshButton } from "./refresh-button"
@@ -13,15 +14,17 @@ export default async function Layout({
   if (!magicWords) redirect("/")
 
   return (
-    <div>
-      <h1>Message Inbox</h1>
-      <div style={{ display: "flex", gap: "1em" }}>
+    <Box>
+      <Heading as="h1" size="2xl" mb="4">
+        Message Inbox
+      </Heading>
+      <HStack gap="4" mb="4">
         <RefreshButton />
-        <Link href="/destroy" className="button danger">
-          Destroy Magic Words
-        </Link>
-      </div>
+        <Button asChild colorPalette="red">
+          <NextLink href="/destroy">Destroy Magic Words</NextLink>
+        </Button>
+      </HStack>
       {children}
-    </div>
+    </Box>
   )
 }

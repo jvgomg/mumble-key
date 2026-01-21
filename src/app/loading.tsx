@@ -1,9 +1,9 @@
+import { Box, Text } from "@chakra-ui/react"
+
 export default function Page() {
   return (
-    <div>
-      <p>
-        <em>Loading…</em>
-      </p>
-    </div>
+    <Box>
+      <Text fontStyle="italic">Loading…</Text>
+    </Box>
   )
 }

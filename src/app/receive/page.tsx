@@ -1,7 +1,8 @@
 import MagicWordsDisplay from "@/components/magic-words-display"
+import { Box, Heading, Link, Separator, Text } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { getSessionMagicWords } from "../../state/mutations"
 import { GenerateMagicWordsFlow } from "./generate-flow"
-import Link from "next/link"
 
 export default async function Page() {
   const magicWords = await getSessionMagicWords()
@@ -9,32 +10,36 @@ export default async function Page() {
   // TODO: check validity of local storage state (is the private key still there?)
 
   return (
-    <div>
-      <h1>Receive messages</h1>
-      <p>
+    <Box>
+      <Heading as="h1" size="2xl" mb="4">
+        Receive messages
+      </Heading>
+      <Text mb="4">
         Generate some Magic Words and then give them to the person who wants to
         send you a message.
-      </p>
+      </Text>
 
       <GenerateMagicWordsFlow />
 
-      <hr />
-      <h2>Magic Words</h2>
+      <Separator my="6" />
+      <Heading as="h2" size="xl" mb="4">
+        Magic Words
+      </Heading>
 
       {magicWords ? (
         <>
           <MagicWordsDisplay magicWords={magicWords} />
-          <p>
+          <Text my="4">
             Mumble these Magic Words to the person who wants to send you a
             message.
-          </p>
-          <Link href="/inbox">Go to Message Inbox</Link>
+          </Text>
+          <Link asChild>
+            <NextLink href="/inbox">Go to Message Inbox</NextLink>
+          </Link>
         </>
       ) : (
-        <>
-          <p>Complete the steps above to summon your Magic Words</p>
-        </>
+        <Text>Complete the steps above to summon your Magic Words</Text>
       )}
-    </div>
+    </Box>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { MagicWords } from "@/state/domain"
+import { Box, Button, Code, HStack } from "@chakra-ui/react"
 
 export const MagicWordsDisplay = ({
   magicWords,
@@ -19,34 +20,26 @@ export const MagicWordsDisplay = ({
   }
 
   return (
-    <div style={{ display: "flex", gap: "1em", alignItems: "center" }}>
-      <ol
-        style={{
-          display: "flex",
-          gap: "1em",
-          listStyle: "none",
-          padding: 0,
-          margin: 0,
-        }}
-      >
+    <HStack gap="4" align="center">
+      <HStack as="ol" gap="4" listStyleType="none" p="0" m="0">
         {magicWords.map((word) => (
-          <li key={word}>
-            <pre>{word}</pre>
-          </li>
+          <Box as="li" key={word}>
+            <Code>{word}</Code>
+          </Box>
         ))}
-      </ol>
+      </HStack>
       {showCopyButton && (
-        <div>
-          <button
-            className="outline"
+        <Box>
+          <Button
+            variant="outline"
             onClick={copyToClipboard}
-            style={{ fontSize: ".77em" }}
+            size="sm"
           >
             Copy to clipboard
-          </button>
-        </div>
+          </Button>
+        </Box>
       )}
-    </div>
+    </HStack>
   )
 }
 

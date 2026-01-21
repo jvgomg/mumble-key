@@ -4,10 +4,11 @@ import {
   getPrivateKeyLocalStorage,
   removePrivateKeyLocalStorage,
 } from "@/state/client-keys"
-import Link from "next/link"
+import { Box, Button, HStack, List, Text } from "@chakra-ui/react"
+import NextLink from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { destroySession } from "../../state/mutations"
-import { useRouter } from "next/navigation"
 
 export const DestroyConfirmation = ({
   serverThings,
@@ -47,30 +48,35 @@ export const DestroyConfirmation = ({
 
   if (!loaded) {
     return (
-      <div>
-        <em>Checking things…</em>
-      </div>
+      <Box>
+        <Text fontStyle="italic">Checking things…</Text>
+      </Box>
     )
   }
 
   return (
-    <div>
-      <p>The following things will be destroyed:</p>
-      <ul>
+    <Box>
+      <Text mb="2">The following things will be destroyed:</Text>
+      <List.Root as="ul" mb="4">
         {thingsToDestroy.map((thing) => (
-          <li key={thing}>{thing}</li>
+          <List.Item key={thing}>{thing}</List.Item>
         ))}
-      </ul>
+      </List.Root>
 
-      <div style={{ display: "flex", gap: "0.5em" }}>
-        <Link href="/" className="button">
-          Cancel
-        </Link>
+      <HStack gap="2">
+        <Button asChild>
+          <NextLink href="/">Cancel</NextLink>
+        </Button>
 
-        <button onClick={confirmed} disabled={working} className="danger">
+        <Button
+          onClick={confirmed}
+          disabled={working}
+          loading={working}
+          colorPalette="red"
+        >
           Destroy session
-        </button>
-      </div>
-    </div>
+        </Button>
+      </HStack>
+    </Box>
   )
 }

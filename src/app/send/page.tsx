@@ -1,4 +1,6 @@
+import { Field } from "@/components/ui/field"
 import { MAGIC_WORDS_PHRASE_LENGTH } from "@/state/domain"
+import { Box, Button, Heading, Input, Text } from "@chakra-ui/react"
 import assert from "assert"
 import { redirect } from "next/navigation"
 
@@ -26,18 +28,21 @@ export default function Page() {
   }
 
   return (
-    <div>
-      <h1>Send messages</h1>
-      <p>
-        To send a message you’ll need to ask the recipient to visit the app and
+    <Box>
+      <Heading as="h1" size="2xl" mb="4">
+        Send messages
+      </Heading>
+      <Text mb="4">
+        To send a message you&apos;ll need to ask the recipient to visit the app and
         generate some Magic Words.
-      </p>
+      </Text>
 
       <form action={handle}>
-        <label htmlFor="words">Recipient’s Magic Words</label>
-        <input id="words" name="words" type="text" required />
-        <button type="submit">Next</button>
+        <Field label="Recipient&apos;s Magic Words" mb="4">
+          <Input id="words" name="words" type="text" required />
+        </Field>
+        <Button type="submit">Next</Button>
       </form>
-    </div>
+    </Box>
   )
 }

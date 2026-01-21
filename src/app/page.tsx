@@ -1,36 +1,41 @@
-import Link from "next/link"
+import { Box, Button, Heading, HStack, Link, Text } from "@chakra-ui/react"
+import NextLink from "next/link"
 
 export default function Page() {
   return (
-    <div>
-      <h1>🗝️ MumbleKey</h1>
-      <p>
-        <em>Send messages securely, anonymously and asynchronously.</em>
-      </p>
-      <p>
+    <Box>
+      <Heading as="h1" size="2xl" mb="4">
+        MumbleKey
+      </Heading>
+      <Text fontStyle="italic" mb="4">
+        Send messages securely, anonymously and asynchronously.
+      </Text>
+      <Text mb="4">
         This application is a Next.js reimplementation of{" "}
-        <a href="https://github.com/pixielabs/whisper-key" target="_blank">
+        <Link href="https://github.com/pixielabs/whisper-key" target="_blank">
           WhisperKey
-        </a>
+        </Link>
         . Learn about this project and read the source code on{" "}
-        <a href="https://github.com/jvgomg/mumble-key" target="_blank">
+        <Link href="https://github.com/jvgomg/mumble-key" target="_blank">
           GitHub
-        </a>
+        </Link>
         .
-      </p>
+      </Text>
 
-      <section>
-        <h2>I want to…</h2>
+      <Box as="section" mt="6">
+        <Heading as="h2" size="xl" mb="4">
+          I want to…
+        </Heading>
 
-        <div style={{ display: "flex", gap: "1em" }}>
-          <Link href="/send" className="button ">
-            Send a message
-          </Link>
-          <Link href="/receive" className="button">
-            Receive messages
-          </Link>
-        </div>
-      </section>
-    </div>
+        <HStack gap="4">
+          <Button asChild>
+            <NextLink href="/send">Send a message</NextLink>
+          </Button>
+          <Button asChild>
+            <NextLink href="/receive">Receive messages</NextLink>
+          </Button>
+        </HStack>
+      </Box>
+    </Box>
   )
 }

@@ -1,8 +1,10 @@
 "use client"
 
+import { Blockquote } from "@/components/ui/blockquote"
 import { getPrivateKeyLocalStorage } from "@/state/client-keys"
 import { decryptMagicMessage } from "@/state/client-message"
 import { MagicMessage } from "@/state/domain"
+import { Box, Button, Code, Text } from "@chakra-ui/react"
 import { useState } from "react"
 
 export const MessageItem = ({ message }: { message: MagicMessage }) => {
@@ -27,18 +29,22 @@ export const MessageItem = ({ message }: { message: MagicMessage }) => {
   }
 
   return (
-    <div>
-      <pre>{message.encryptedMessage}</pre>
+    <Box mb="4">
+      <Code display="block" whiteSpace="pre-wrap" wordBreak="break-all" mb="2">
+        {message.encryptedMessage}
+      </Code>
 
       {decrypted && "message" in decrypted && (
-        <blockquote>{decrypted.message}</blockquote>
+        <Blockquote my="2">{decrypted.message}</Blockquote>
       )}
 
-      {decrypted && "error" in decrypted && <p>{decrypted.error}</p>}
+      {decrypted && "error" in decrypted && (
+        <Text color="red.500">{decrypted.error}</Text>
+      )}
 
-      <button onClick={handle} disabled={decrypted && "message" in decrypted}>
+      <Button onClick={handle} disabled={decrypted && "message" in decrypted}>
         Decrypt message
-      </button>
-    </div>
+      </Button>
+    </Box>
   )
 }

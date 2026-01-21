@@ -1,12 +1,13 @@
 "use client"
 
-import { exchangePublicKeyForMagicWords } from "@/state/mutations"
 import {
   generateClientKeyPair,
   setPrivateKeyLocalStorage,
   stringifyKey,
 } from "@/state/client-keys"
 import { MagicWords } from "@/state/domain"
+import { exchangePublicKeyForMagicWords } from "@/state/mutations"
+import { Box, Button, Code, Heading, Text } from "@chakra-ui/react"
 import { useState } from "react"
 
 export const GenerateMagicWordsFlow = () => {
@@ -46,57 +47,63 @@ export const GenerateMagicWordsFlow = () => {
   }
 
   return (
-    <div>
-      <h2>Generate Magic Words</h2>
-      <p>
+    <Box>
+      <Heading as="h2" size="xl" mb="4">
+        Generate Magic Words
+      </Heading>
+      <Text mb="4">
         Summoning Magic Words in a secure way requires an enchantment involving
         a few steps.
-      </p>
+      </Text>
 
-      <section data-complete={!!step1}>
-        <h3>Step 1</h3>
-        <p>
-          Generate 2 cryptographic keys locally, within your device’s web
+      <Box as="section" mb="4" data-complete={!!step1}>
+        <Heading as="h3" size="lg" mb="2">
+          Step 1
+        </Heading>
+        <Text mb="2">
+          Generate 2 cryptographic keys locally, within your device&apos;s web
           browser
-        </p>
-        <button onClick={generate} disabled={working || !!step1}>
+        </Text>
+        <Button onClick={generate} disabled={working || !!step1}>
           Generate Keys
-        </button>
-        {step1?.time && <pre>Time taken: {step1.time / 1000} seconds</pre>}
-      </section>
+        </Button>
+        {step1?.time && (
+          <Code display="block" mt="2">
+            Time taken: {step1.time / 1000} seconds
+          </Code>
+        )}
+      </Box>
 
-      <section data-complete={!!step1}>
-        <h3>Step 2</h3>
-        <p>
-          Save the <em>private</em> key into your web browser storage
-        </p>
-        <div>
-          <div>
-            <button
-              disabled={!step1 || !!step2 || working}
-              onClick={savePrivateKey}
-            >
-              Save private key locally
-            </button>
-          </div>
-        </div>
-      </section>
+      <Box as="section" mb="4" data-complete={!!step1}>
+        <Heading as="h3" size="lg" mb="2">
+          Step 2
+        </Heading>
+        <Text mb="2">
+          Save the <Text as="em" fontStyle="italic">private</Text> key into your web browser&apos;s storage
+        </Text>
+        <Button
+          disabled={!step1 || !!step2 || working}
+          onClick={savePrivateKey}
+        >
+          Save private key locally
+        </Button>
+      </Box>
 
-      <section data-complete={!!step1 || !!step2}>
-        <h3>Step 3</h3>
-        <p>
-          Send the <em>public</em> key to the server and exchange for some Magic
+      <Box as="section" mb="4" data-complete={!!step1 || !!step2}>
+        <Heading as="h3" size="lg" mb="2">
+          Step 3
+        </Heading>
+        <Text mb="2">
+          Send the <Text as="em" fontStyle="italic">public</Text> key to the server and exchange for some Magic
           Words
-        </p>
-        <div>
-          <button
-            disabled={!step1 || !step2 || !!step3 || working}
-            onClick={exchangePublicKey}
-          >
-            Send public key
-          </button>
-        </div>
-      </section>
-    </div>
+        </Text>
+        <Button
+          disabled={!step1 || !step2 || !!step3 || working}
+          onClick={exchangePublicKey}
+        >
+          Send public key
+        </Button>
+      </Box>
+    </Box>
   )
 }

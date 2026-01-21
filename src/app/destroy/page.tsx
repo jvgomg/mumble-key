@@ -1,17 +1,20 @@
 import { sessionGet } from "@/state/session"
+import { Box, Heading, Text } from "@chakra-ui/react"
+import { redirect } from "next/navigation"
 import { getSessionMagicWords, getSessionMessages } from "../../state/mutations"
 import { DestroyConfirmation } from "./destory-confirmation"
-import { redirect } from "next/navigation"
 
 export default async function Page() {
   const thingsToDestroy = await getThingsToDestroy()
 
   return (
-    <div>
-      <h1>Start again</h1>
-      <p>Are you sure you want destroy your session?</p>
+    <Box>
+      <Heading as="h1" size="2xl" mb="4">
+        Start again
+      </Heading>
+      <Text mb="4">Are you sure you want destroy your session?</Text>
       <DestroyConfirmation serverThings={thingsToDestroy} />
-    </div>
+    </Box>
   )
 }
 

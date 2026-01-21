@@ -1,3 +1,4 @@
+import { Box, List, Text } from "@chakra-ui/react"
 import { getSessionMessages } from "../../state/mutations"
 import { MessageItem } from "./message-item"
 
@@ -6,21 +7,21 @@ export default async function Page() {
 
   if (!messages.length) {
     return (
-      <div>
-        <p>You have no messages</p>
-      </div>
+      <Box>
+        <Text>You have no messages</Text>
+      </Box>
     )
   }
 
   return (
-    <div>
-      <ol>
+    <Box>
+      <List.Root as="ol" gap="4">
         {messages.map((message, i) => (
-          <li key={message.encryptedMessage?.slice(0, 4) || i}>
+          <List.Item key={message.encryptedMessage?.slice(0, 4) || i}>
             <MessageItem message={message} />
-          </li>
+          </List.Item>
         ))}
-      </ol>
-    </div>
+      </List.Root>
+    </Box>
   )
 }

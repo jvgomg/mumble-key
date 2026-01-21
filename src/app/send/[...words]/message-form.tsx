@@ -1,11 +1,13 @@
 "use client"
 
 import MagicWordsDisplay from "@/components/magic-words-display"
+import { Field } from "@/components/ui/field"
 import { packageMessage } from "@/state/client-message"
 import { MagicWords } from "@/state/domain"
+import { Box, Button, Text, Textarea } from "@chakra-ui/react"
 import { useActionState } from "react"
-import { createMessage } from "./actions"
 import { useFormStatus } from "react-dom"
+import { createMessage } from "./actions"
 
 const initialState = {
   message: "",
@@ -39,22 +41,18 @@ export const MessageForm = ({
   const [state, formAction] = useActionState(handleSubmit, initialState)
 
   return (
-    <>
-      <form action={formAction}>
-        <div>
-          <label>Magic Words</label>
-          <MagicWordsDisplay magicWords={magicWords} showCopyButton={false} />
-        </div>
-        <div>
-          <label htmlFor="message">Message</label>
-          <textarea id="message" name="message" />
-        </div>
-        <SubmitButton />
-        <p aria-live="polite" className="sr-only" role="status">
-          <strong>{state?.message}</strong>
-        </p>
-      </form>
-    </>
+    <form action={formAction}>
+      <Field label="Magic Words" mb="4">
+        <MagicWordsDisplay magicWords={magicWords} showCopyButton={false} />
+      </Field>
+      <Field label="Message" mb="4">
+        <Textarea id="message" name="message" />
+      </Field>
+      <SubmitButton />
+      <Text as="p" aria-live="polite" srOnly role="status">
+        <strong>{state?.message}</strong>
+      </Text>
+    </form>
   )
 }
 
@@ -62,8 +60,8 @@ function SubmitButton() {
   const { pending } = useFormStatus()
 
   return (
-    <button type="submit" aria-disabled={pending}>
+    <Button type="submit" aria-disabled={pending} loading={pending}>
       Send message
-    </button>
+    </Button>
   )
 }

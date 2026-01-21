@@ -1,5 +1,6 @@
 import { MagicWords } from "@/state/domain"
 import { exchangeMagicWordsForPublicKey } from "@/state/mutations"
+import { Box, Heading } from "@chakra-ui/react"
 import { MessageForm } from "./message-form"
 
 interface Props {
@@ -13,9 +14,11 @@ export default async function Page({ params }: Props) {
   // TODO: handle magic words not found
 
   return (
-    <div>
-      <h1>Send a message…</h1>
+    <Box>
+      <Heading as="h1" size="2xl" mb="4">
+        Send a message…
+      </Heading>
       <MessageForm receiverPublicKey={publicKey} magicWords={magicWords} />
-    </div>
+    </Box>
   )
 }
