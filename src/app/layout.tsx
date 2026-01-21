@@ -19,9 +19,15 @@ export default async function Layout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        <Provider>
-          <Container maxW="container.md" px="4" display="flex" flexDirection="column" minH="100vh">
+      <body suppressHydrationWarning>
+        <Provider defaultTheme="system" enableSystem>
+          <Container
+            maxW="2xl"
+            px="4"
+            display="flex"
+            flexDirection="column"
+            minH="100vh"
+          >
             <Box as="header" py="4">
               <Box as="nav" mb="2">
                 <Link href="/">Mumble Key</Link>
@@ -45,11 +51,11 @@ export default async function Layout({
 
             <Box as="footer" py="4">
               <Separator mb="4" />
-              <Text fontSize="sm" color="text.secondary">
+              <Text fontSize="sm" color="text.secondary" suppressHydrationWarning>
                 This application is under active development. It should not be
                 used to send sensitive information.
               </Text>
-              <Text fontSize="sm" color="text.secondary">
+              <Text fontSize="sm" color="text.secondary" suppressHydrationWarning>
                 Use at your own risk!
               </Text>
             </Box>
