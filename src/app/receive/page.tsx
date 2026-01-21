@@ -1,45 +1,29 @@
-import MagicWordsDisplay from "@/components/magic-words-display"
-import { Box, Heading, Link, Separator, Text } from "@chakra-ui/react"
-import NextLink from "next/link"
+import { Alert } from "@/components/ui/alert"
+import { Box, Heading, Text } from "@chakra-ui/react"
+import { LuShieldCheck } from "react-icons/lu"
 import { getSessionMagicWords } from "../../state/mutations"
 import { GenerateMagicWordsFlow } from "./generate-flow"
 
 export default async function Page() {
-  const magicWords = await getSessionMagicWords()
-
-  // TODO: check validity of local storage state (is the private key still there?)
+  const existingMagicWords = await getSessionMagicWords()
 
   return (
     <Box>
       <Heading as="h1" size="2xl" mb="4">
-        Receive messages
+        Receive Messages
       </Heading>
       <Text mb="4">
-        Generate some Magic Words and then give them to the person who wants to
-        send you a message.
+        To receive encrypted messages, you&apos;ll need to generate a set of
+        Magic Words. These three special words act as your unique receiving
+        address — share them with anyone who wants to send you a private
+        message.
+      </Text>
+      <Text mb="6">
+        The process creates a cryptographic key pair on your device. Messages
+        sent to your Magic Words can only be decrypted by you.
       </Text>
 
-      <GenerateMagicWordsFlow />
-
-      <Separator my="6" />
-      <Heading as="h2" size="xl" mb="4">
-        Magic Words
-      </Heading>
-
-      {magicWords ? (
-        <>
-          <MagicWordsDisplay magicWords={magicWords} />
-          <Text my="4">
-            Mumble these Magic Words to the person who wants to send you a
-            message.
-          </Text>
-          <Link asChild>
-            <NextLink href="/inbox">Go to Message Inbox</NextLink>
-          </Link>
-        </>
-      ) : (
-        <Text>Complete the steps above to summon your Magic Words</Text>
-      )}
+      <GenerateMagicWordsFlow existingMagicWords={existingMagicWords} />
     </Box>
   )
 }
