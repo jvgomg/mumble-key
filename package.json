@@ -2,6 +2,7 @@
   "name": "mumble-key",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "rm -fr .next && next dev --webpack",
     "build": "next build",
